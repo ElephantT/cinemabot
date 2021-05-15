@@ -237,7 +237,8 @@ class MyBot:
 
 if __name__ == '__main__':
     bot = MyBot()
-
+    
+    APP_NAME = 'tttgbottt'
     WEBHOOK_HOST = f'https://{os.environ["APP_NAME"]}.herokuapp.com'
     WEBHOOK_PATH = f'/webhook{os.environ["BOT_TOKEN"]}'
     WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
