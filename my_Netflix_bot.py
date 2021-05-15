@@ -235,7 +235,7 @@ async def echo(message: types.Message):
 
 # Run after startup
 async def on_startup(dispatcher: Dispatcher):
-    await bot.delete_webhook()
+    # await bot.delete_webhook()
     await bot.set_webhook(WEBHOOK_URL)
 
 
@@ -248,6 +248,8 @@ async def on_shutdown(dispatcher: Dispatcher):
 
 if __name__ == "__main__":
     if "HEROKU" in list(os.environ.keys()):
+        await bot.set_webhook(WEBHOOK_URL)
+
         executor.start_webhook(
             dispatcher=dp,
             webhook_path=WEBHOOK_PATH,
