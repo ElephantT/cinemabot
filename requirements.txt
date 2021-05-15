@@ -3,3 +3,7 @@ chardet==4.0.0
 idna==2.10
 requests==2.25.1
 urllib3==1.26.4
+
+# from aiohttp_devtools/start/template/requirements.txt
+aiohttp==3.5.4
+aiohttp-session[secure]==2.9.0
