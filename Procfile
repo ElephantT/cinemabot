@@ -1,1 +1,1 @@
-web: python my_Netflix_bot.py
+worker: python my_Netflix_bot.py
