@@ -23,7 +23,10 @@ class MyBot:
     @staticmethod
     @dp.message_handler(commands=['start'])
     async def send_welcome(message: types.Message):
-        await message.answer("Greetings!\nI'm OMEGA_400_SDA_Bot!\nMy creator is Aleksandr Dubeykovsky")
+        try:
+            await message.answer("Greetings!\nI'm OMEGA_400_SDA_Bot!\nMy creator is Aleksandr Dubeykovsky")
+        except Exception as e:
+            pass
 
     @staticmethod
     def info_adder(text: str, key: str, sep: str, data_parsed: typing.Any) -> str:
@@ -39,62 +42,68 @@ class MyBot:
         # TO DO - make photo and text appear together
         # SOLVED
         separator = "----------------------------------"
-        async with session.get(url) as resp:
-            data = await resp.read()
-            data_parsed = json.loads(data)
-            if 'results' in data_parsed:
-                # TO DO - check for dict keys if they are exist
-                # SOLVED
-                text = ""
-                real_title = query
-                if 'title' in data_parsed['results'][0]:
-                    real_title = data_parsed['results'][0]['title']
-                elif 'name' in data_parsed['results'][0]:
-                    real_title = data_parsed['results'][0]['name']
-                elif 'original_title' in data_parsed['results'][0]:
-                    real_title = data_parsed['results'][0]['original_title']
-                elif 'original_name' in data_parsed['results'][0]:
-                    real_title = data_parsed['results'][0]['original_name']
+        try:
+            async with session.get(url) as resp:
+                data = await resp.read()
+                data_parsed = json.loads(data)
+                if 'results' in data_parsed:
+                    # TO DO - check for dict keys if they are exist
+                    # SOLVED
+                    text = ""
+                    real_title = query
+                    if 'title' in data_parsed['results'][0]:
+                        real_title = data_parsed['results'][0]['title']
+                    elif 'name' in data_parsed['results'][0]:
+                        real_title = data_parsed['results'][0]['name']
+                    elif 'original_title' in data_parsed['results'][0]:
+                        real_title = data_parsed['results'][0]['original_title']
+                    elif 'original_name' in data_parsed['results'][0]:
+                        real_title = data_parsed['results'][0]['original_name']
 
-                if obj == "movie":
-                    text = MyBot.info_adder(text, "title", separator, data_parsed)
-                    text = MyBot.info_adder(text, "release_date", separator, data_parsed)
-                    text = MyBot.info_adder(text, "overview", separator, data_parsed)
-                elif obj == "serial":
-                    text = MyBot.info_adder(text, "name", separator, data_parsed)
-                    text = MyBot.info_adder(text, "first_air_date", separator, data_parsed)
-                    text = MyBot.info_adder(text, "overview", separator, data_parsed)
+                    if obj == "movie":
+                        text = MyBot.info_adder(text, "title", separator, data_parsed)
+                        text = MyBot.info_adder(text, "release_date", separator, data_parsed)
+                        text = MyBot.info_adder(text, "overview", separator, data_parsed)
+                    elif obj == "serial":
+                        text = MyBot.info_adder(text, "name", separator, data_parsed)
+                        text = MyBot.info_adder(text, "first_air_date", separator, data_parsed)
+                        text = MyBot.info_adder(text, "overview", separator, data_parsed)
 
-                google_url = "https://www.google.com/search?q=watch%20online%20" + \
-                             real_title.replace(' ', "%20") + "&num=10"
-                async with session.get(google_url, headers={"User-Agent": 'Mozilla'}) as response:
-                    t = await response.read()
-                    # TO DO add more web-sites to check
-                    ss = t.find(b'amazon')
-                    if ss == -1:
-                        amazon_url = "no url on amazon is found, i would suggest you to google search:\n" + \
-                                     google_url[:-7]
+                    google_url = "https://www.google.com/search?q=watch%20online%20" + \
+                                 real_title.replace(' ', "%20") + "&num=10"
+                    async with session.get(google_url, headers={"User-Agent": 'Mozilla'}) as response:
+                        t = await response.read()
+                        # TO DO add more web-sites to check
+                        ss = t.find(b'amazon')
+                        if ss == -1:
+                            amazon_url = "no url on amazon is found, i would suggest you to google search:\n" + \
+                                         google_url[:-7]
+                        else:
+                            amazon_url = t[ss:]
+                            amazon_url = amazon_url[:amazon_url.find(b'&')]
+                            amazon_url = amazon_url.decode('utf-8')
+
+                    text += "Where to watch:\n" + amazon_url
+
+                    if data_parsed['results'][0]['poster_path']:
+                        await message.answer_photo("http://image.tmdb.org/t/p/w185" +
+                                                   data_parsed['results'][0]['poster_path'], caption=text)
                     else:
-                        amazon_url = t[ss:]
-                        amazon_url = amazon_url[:amazon_url.find(b'&')]
-                        amazon_url = amazon_url.decode('utf-8')
-
-                text += "Where to watch:\n" + amazon_url
-
-                if data_parsed['results'][0]['poster_path']:
-                    await message.answer_photo("http://image.tmdb.org/t/p/w185" +
-                                               data_parsed['results'][0]['poster_path'], caption=text)
+                        await message.answer("no poster available + \n" + text)
                 else:
-                    await message.answer("no poster available + \n" + text)
-            else:
-                await message.answer("On query = " + query + " nothing is found")
+                    await message.answer("On query = " + query + " nothing is found")
+        except Exception as e:
+            pass
 
     @staticmethod
     async def header(message: types.Message):
         request_text = message.text[message.text.find(' ') + 1:]
         parsed_request_text = request_text.split(sep="#")
-        await message.answer("Your search request is: \n" + str([str(i + 1) + " " + parsed_request_text[i]
-                                                                 for i in range(len(parsed_request_text))]))
+        try:
+            await message.answer("Your search request is: \n" + str([str(i + 1) + " " + parsed_request_text[i]
+                                                                     for i in range(len(parsed_request_text))]))
+        except Exception as e:
+            pass
         return parsed_request_text
 
     @staticmethod
@@ -102,7 +111,10 @@ class MyBot:
     async def get_movies_info(message: types.Message):
         # current - # is a delimiter
         # TO DO - smarter parsing
-        parsed_request_text = await MyBot.header(message)
+        try:
+            parsed_request_text = await MyBot.header(message)
+        except Exception as e:
+            pass
 
         # TO DO - process moments, when just one task is not working, but show other queries
         # SOLVED 99%
@@ -123,7 +135,10 @@ class MyBot:
     async def get_serial_info(message: types.Message):
         # current - # is a delimiter
         # TO DO - smarter parsing
-        parsed_request_text = await MyBot.header(message)
+        try:
+            parsed_request_text = await MyBot.header(message)
+        except Exception as e:
+            pass
         # TO DO - process moments, when just one task is not working, but show other queries
         # SOLVED 99%
         urls = ["https://api.themoviedb.org/3/search/tv?" + "api_key=" + "200274d3065345401cde5322003c6a9a" +
@@ -144,8 +159,11 @@ class MyBot:
         separator = "\n----------------------------------\n"
         request_text = message.text[message.text.find(' ') + 1:]
         parsed_request_text = request_text.split(sep="#")
-        await message.answer("Your 'popular' request is: \n" + str([parsed_request_text[i]
-                                                                    for i in range(len(parsed_request_text))]))
+        try:
+            await message.answer("Your 'popular' request is: \n" + str([parsed_request_text[i]
+                                                                        for i in range(len(parsed_request_text))]))
+        except Exception as e:
+            pass
         # 0 - movie/tv
         if len(parsed_request_text) <= 0:
             media_type = "movie"
