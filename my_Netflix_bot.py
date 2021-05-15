@@ -21,7 +21,7 @@ WEBHOOK_PATH = f'/webhook1731601685:AAH0eWs7pZw1N-ChRRVcpIRUlwzLyVelZHo'
 WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
 
 WEBAPP_HOST = '0.0.0.0'
-WEBAPP_PORT = int(os.getenv('PORT', default=8000))
+WEBAPP_PORT = int(os.getenv('PORT', default=19749))
 
 
 @dp.message_handler(commands=['start'])
@@ -245,12 +245,16 @@ async def on_shutdown(dispatcher: Dispatcher):
 
 
 if __name__ == "__main__":
+    # if "HEROKU" in list(os.environ.keys()):
+    
     executor.start_webhook(
         dispatcher=dp,
         webhook_path=WEBHOOK_PATH,
         on_startup=on_startup,
-        #on_shutdown=on_shutdown,
+        on_shutdown=on_shutdown,
         skip_updates=False,
         host=WEBAPP_HOST,
         port=WEBAPP_PORT,
     )
+    # else:
+    #     executor.start_polling(dp)
