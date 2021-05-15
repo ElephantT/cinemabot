@@ -242,14 +242,10 @@ async def on_startup(dispatcher: Dispatcher):
 # Run before shutdown
 async def on_shutdown(dispatcher: Dispatcher):
     await bot.delete_webhook()
-    await dp.storage.close()
-    await dp.storage.wait_closed()
 
 
 if __name__ == "__main__":
     if "HEROKU" in list(os.environ.keys()):
-        await bot.set_webhook(WEBHOOK_URL)
-
         executor.start_webhook(
             dispatcher=dp,
             webhook_path=WEBHOOK_PATH,
