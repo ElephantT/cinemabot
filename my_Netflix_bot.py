@@ -5,10 +5,7 @@ import aiohttp
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
-import tmdbv3api
 import json
-import http.client
-from bs4 import BeautifulSoup
 
 
 class MyBot:
