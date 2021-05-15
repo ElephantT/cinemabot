@@ -6,6 +6,11 @@ from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 import json
+from flask import Flask
+import os
+
+
+BOT_TOKEN = '1731601685:AAH0eWs7pZw1N-ChRRVcpIRUlwzLyVelZHo'
 
 
 class MyBot:
@@ -232,4 +237,16 @@ class MyBot:
 
 if __name__ == '__main__':
     bot = MyBot()
-    executor.start_polling(bot.get_dp())
+
+    WEBHOOK_HOST = f'https://{os.environ["APP_NAME"]}.herokuapp.com'
+    WEBHOOK_PATH = f'/webhook{os.environ["BOT_TOKEN"]}'
+    WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
+
+    WEBAPP_HOST = '0.0.0.0'
+    WEBAPP_PORT = int(os.getenv('PORT', default=8000))
+
+    executor.start_webhook(dispatcher=bot.get_dp(),
+                           webhook_path=WEBHOOK_PATH,
+                           skip_updates=False,
+                           host=WEBAPP_HOST,
+                           port=WEBAPP_PORT)
