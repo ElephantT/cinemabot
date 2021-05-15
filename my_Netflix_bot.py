@@ -17,7 +17,7 @@ bot = Bot(token=__BOT_TOKEN)
 dp = Dispatcher(bot)
 
 WEBHOOK_HOST = f'https://tttgbottt.herokuapp.com'
-WEBHOOK_PATH = f'/1731601685:AAH0eWs7pZw1N-ChRRVcpIRUlwzLyVelZHo'
+WEBHOOK_PATH = f'/webhook1731601685:AAH0eWs7pZw1N-ChRRVcpIRUlwzLyVelZHo'
 WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
 
 WEBAPP_HOST = '0.0.0.0'
