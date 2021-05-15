@@ -116,7 +116,7 @@ class MyBot:
                                                                          url[url.find("query=") + 6:])))
                 await asyncio.gather(*tasks)
         except Exception as e:
-            raise e
+            pass
 
     @staticmethod
     @dp.message_handler(commands=['get_serial_info'])
@@ -136,7 +136,7 @@ class MyBot:
                                                                          url[url.find("query=") + 6:], obj="serial")))
                 await asyncio.gather(*tasks)
         except Exception as e:
-            raise e
+            pass
 
     @staticmethod
     @dp.message_handler(commands=['popular'])
@@ -186,7 +186,7 @@ class MyBot:
                                           data_parsed['results'][i]['overview'])))
                         await asyncio.gather(*tasks)
         except Exception as e:
-            raise e
+            pass
 
     @staticmethod
     @dp.message_handler(commands=['help'])
