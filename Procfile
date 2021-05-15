@@ -1,2 +1,1 @@
-heroku ps:scale web=1
-worker: python my_Netflix_bot.py
+web: python my_Netflix_bot.py
