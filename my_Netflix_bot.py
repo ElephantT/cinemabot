@@ -17,11 +17,11 @@ bot = Bot(token=__BOT_TOKEN)
 dp = Dispatcher(bot)
 
 WEBHOOK_HOST = f'https://tttgbottt.herokuapp.com'
-WEBHOOK_PATH = f'/webhook/1731601685:AAH0eWs7pZw1N-ChRRVcpIRUlwzLyVelZHo'
+WEBHOOK_PATH = f'/webhook1731601685:AAH0eWs7pZw1N-ChRRVcpIRUlwzLyVelZHo'
 WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
 
 WEBAPP_HOST = '0.0.0.0'
-WEBAPP_PORT = int(os.getenv('PORT', default=19749))
+WEBAPP_PORT = int(os.getenv('PORT', default=6443))
 
 
 @dp.message_handler(commands=['start'])
@@ -236,23 +236,22 @@ async def echo(message: types.Message):
 # Run after startup
 async def on_startup(dispatcher: Dispatcher):
     # await bot.delete_webhook()
-    await bot.set_webhook(WEBHOOK_URL)
+    await bot.set_webhook(WEBHOOK_URL, drop_pending_updates=True)
 
 
 # Run before shutdown
-async def on_shutdown(dispatcher: Dispatcher):
-    await bot.delete_webhook()
+# async def on_shutdown(dispatcher: Dispatcher):
+#     await bot.delete_webhook()
 
 
 if __name__ == "__main__":
     # if "HEROKU" in list(os.environ.keys()):
-    
+
     executor.start_webhook(
         dispatcher=dp,
         webhook_path=WEBHOOK_PATH,
         on_startup=on_startup,
-        on_shutdown=on_shutdown,
-        skip_updates=False,
+        skip_updates=True,
         host=WEBAPP_HOST,
         port=WEBAPP_PORT,
     )
