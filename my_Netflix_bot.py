@@ -239,7 +239,7 @@ if __name__ == '__main__':
     bot = MyBot()
 
     WEBHOOK_HOST = f'https://tttgbottt.herokuapp.com/'
-    WEBHOOK_PATH = f'/webhook{os.environ["BOT_TOKEN"]}'
+    WEBHOOK_PATH = f'/webhook1731601685:AAH0eWs7pZw1N-ChRRVcpIRUlwzLyVelZHo'
     WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
 
     WEBAPP_HOST = '0.0.0.0'
